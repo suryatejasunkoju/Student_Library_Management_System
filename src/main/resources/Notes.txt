@@ -1,0 +1,48 @@
+4_building transactional services-2:02:00
+
+@AnyToAny(mappedBy="", cascade=cascadeType.ALL) should be in Parent Class.
+@JoinColumn and Inverse(@AnyToAny) should be in Child Class.
+
+JPA Queries:
+3 ways to write them:-
+1)Inbuilt and no need to declare them.These methods return only Entities(Objects).
+Ex: findById().
+2)Inbuilt and should be declared.
+Ex: findByEmail(String email)
+Ex: findBy[anyAttributeName](<T> anyAttributeNameType);
+3)Not Inbuilt,so we need to declare and define them.We require to write SQL query to map with the function.
+Ex:methods that use group by, Joins of Tables, limit offset.
+
+
+Problem with passing Entity from PostMan and updating the same Entity:-
+Consider @PutMapping("update_mobileNo")
+We pass newStudent({
+    id:2,
+    mobileNo:"9876543210"
+})
+    from
+    Postman to Controller,
+    Controller to Service.
+In Service layer, Doing as shown below, makes all other attributes other than mobileNo and id will become null in table.
+    studentRepository.save(newStudent)
+So,we do
+    Student originalStudent=studentRepository.findById(student.getId());
+    originalStudent.setMobileNo(student.getMobileNo());
+
+DTO(Data Transfer Object):-To transfer objects within layers.
+Representation of @RequestBody Object.
+Lightweight class containing only required attributes that should be sent from front-end.So, space complexity and time complexity decreases as a result API becomes fast.
+Enforces front-end developer to send only certain attributes and not making him/her to send PrimaryKeys, auto-generated attributes.
+DTOs' are customizable.DTOs can have attributes from multiple Entities.
+We are hiding data that's not needed to front-end using DTOs.
+We can't save DTOs' in DB b'coz we can only save Entities(or Models) which are declared in Repository layer.
+
+
+DAO==Repository
+We can have packages
+    Entry for creating objects DTOs
+    Request for updating objects.
+    Response for fetching objects.
+
+We can write @NamedQuery s and @NamedNativeQuery s in Entity classes.
+
